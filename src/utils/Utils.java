@@ -12,14 +12,14 @@ import java.io.IOException;
 
 public class Utils {
     static String cache = "";   // Stores input reading remains
-    
+
     /**
      * @return Whole line of user input
      */
     public static String inputStringLine() {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         String string = "";
-        
+
         // Get user input and make sure it's not blank
         try {
             do {
@@ -30,11 +30,11 @@ public class Utils {
             } while (string.equals(""));                               
         } catch (IOException e) {
             System.out.println("Invalid input given - Error: " + e);
-        }        
-        
+        }
+
         return string;
     }
-    
+
     /**
      * @return Everything between separators ("/') or a single word if no separators are found
      */
@@ -42,18 +42,18 @@ public class Utils {
         // If cache is empty read user input and store it in cache
         if (cache.equals("")) {
             BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-            
+
             try {
                 cache = br.readLine().trim();
             } catch (IOException e) {
                 System.out.println("Invalid input given - Error: " + e);
-            }            
+            }
         }
-        
+
         // Read from cache instead of directly from user input
         StringReader sr = new StringReader(cache);
         String string = "";
-        
+
         try {
             int i = sr.read();
             // If first char found is a separator catch everything til next separator
@@ -70,13 +70,13 @@ public class Utils {
                     i = sr.read();
                 } while (i != -1 && i != (char)' ');
             }
-            
+
             // Store rest of user input back to cache for future reading
             cache = cache.substring(string.length()).trim();
         } catch (IOException e) {
             System.out.println("Invalid input given - Error: " + e);
         }
-        
+
         return string.trim();
     }
 }
