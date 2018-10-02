@@ -11,12 +11,12 @@ import java.io.StringReader;
 import java.io.IOException;
 
 public class Utils {
-    static String cache = "";   // Stores input reading remains
+    static String buffer = "";   // Stores input reading remains
 
     /**
-     * @return Whole line of user input
+     * @return whole line of user input
      */
-    public static String inputStringLine() {
+    public static String nextLine() {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         String string = "";
 
@@ -27,7 +27,7 @@ public class Utils {
                 if (string.equals("")) {
                     System.out.println("Can't leave blank input");
                 } 
-            } while (string.equals(""));                               
+            } while (string.equals(""));
         } catch (IOException e) {
             System.out.println("Invalid input given - Error: " + e);
         }
@@ -36,47 +36,73 @@ public class Utils {
     }
 
     /**
-     * @return Everything between separators ("/') or a single word if no separators are found
+     * @return everything between separators
+     * @param separator character used as a separator
      */
-    public static String inputString() {
-        // If cache is empty read user input and store it in cache
-        if (cache.equals("")) {
+    public static String nextString(String separator) {
+        // If buffer is empty read user input and store it in buffer
+        fillBuffer();
+
+        // Read from buffer instead of directly from user input
+        StringReader sr = new StringReader(buffer);
+        String string = "";
+
+        try {
+            // Read til a separator is found
+            do {
+                string += (char)sr.read();
+            } while (string.charAt(string.length() - 1) != separator.charAt(0));
+
+            // Store rest of user input back to buffer for future reading
+            buffer = buffer.substring(string.length());
+        } catch (IOException e) {
+            System.out.println("Invalid input given: " + e.getMessage());
+        }
+
+        // Return everything read minus the separator
+        return string.substring(0, string.length() - 1);
+    }
+    /**
+     * nextString(String separator) for single words.
+     * @return next single word found
+     */
+    public static String nextString() {
+        return nextString(" ");
+    }
+
+    public static int nextInt(String separator) {
+        boolean valid = false;
+        int i = 0;
+
+        do {
+            try {
+                i = Integer.parseInt(nextString(separator));
+                valid = true;
+            } catch (Exception e) {
+                System.out.println("Invalid input given: " + e.getMessage());
+                buffer = "";
+            }
+        } while (!valid);
+
+        return i;
+    }
+    public static int nextInt() {
+        return 0;
+    }
+
+    /**
+     * Checks if buffer is empty and stores user input in it if so.
+     */
+    public static void fillBuffer() {
+        if (buffer.equals("")) {
             BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 
             try {
-                cache = br.readLine().trim();
+                buffer = br.readLine();
+                System.out.println("Buffer: " + buffer);
             } catch (IOException e) {
                 System.out.println("Invalid input given - Error: " + e);
             }
         }
-
-        // Read from cache instead of directly from user input
-        StringReader sr = new StringReader(cache);
-        String string = "";
-
-        try {
-            int i = sr.read();
-            // If first char found is a separator catch everything til next separator
-            if (i == (char)'"' || i == (char)'\'') {
-                do {
-                    i = sr.read();
-                    string += (char)i;
-                } while (i != (char)'"' && i != (char)'\'');
-                string = string.substring(0, string.length() - 1) + "  ";   // GITANADA MASTER
-            // else catch just that single word
-            } else {
-                do {
-                    string += (char)i;
-                    i = sr.read();
-                } while (i != -1 && i != (char)' ');
-            }
-
-            // Store rest of user input back to cache for future reading
-            cache = cache.substring(string.length()).trim();
-        } catch (IOException e) {
-            System.out.println("Invalid input given - Error: " + e);
-        }
-
-        return string.trim();
     }
 }
