@@ -33,9 +33,11 @@ public class Reader {
             StringReader sr = new StringReader(buffer);
             
             // Read til a separator is found
+            char c;
             do {
-                string += (char)sr.read();
-            } while (string.charAt(string.length() - 1) != separator.charAt(0));
+                c = (char)sr.read();
+                string += c;
+            } while (c != separator.charAt(0));
             
             // Store rest of user input back to buffer for future reading
             buffer = buffer.substring(string.length());
