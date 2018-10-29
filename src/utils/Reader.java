@@ -18,39 +18,39 @@ public class Reader {
      */
     public static String separator = ";";
     static String buffer = "";  // Stores input for later reading
-        
+
     /**
      * @return everything between separators or the whole line if no separator was found
      */
     public static String nextString() {
         String string = "";
-        
+
         try {
             if (buffer.equals(""))
                 readLineIntoBuffer();
-            
+
             // Read from buffer instead of directly from user input
             StringReader sr = new StringReader(buffer);
-            
+
             // Read til a separator is found
             char c;
             do {
                 c = (char)sr.read();
                 string += c;
             } while (c != separator.charAt(0));
-            
+
             // Store rest of user input back to buffer for future reading
             buffer = buffer.substring(string.length());
         } catch (IOException e) {
             System.out.println("There was an error when reading from input - " + e.getMessage());
         }
-        
+
         // Remove the ending separator
         string = string.substring(0, string.length() - 1);
-        
+
         return string;
     }
-    
+
     /**
      * Asks for integer number til a valid one is given, will read til separator or end of input.
      * @return next integer found
@@ -59,7 +59,7 @@ public class Reader {
         boolean valid = false;
         String s = "";
         int i = 0;
-        
+
         do {
             try {
                 s = nextString();
@@ -68,12 +68,12 @@ public class Reader {
             } catch (NumberFormatException e) {
                 System.out.println("Invalid input given: " + s + ". Integer number expected");
                 buffer = "";    // Empty buffer so nextString() reads user input again
-            }    
+            }
         } while (!valid);
-        
+
         return i;
     }
-    
+
     /**
      * Stores whole line of user input for future reading.
      */
