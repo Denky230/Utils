@@ -52,7 +52,7 @@ public class Reader {
     }
     
     /**
-     * Asks for integer number til a valid one is given, will read til separator or end of input.
+     * Asks for an integer number til a valid one is given, will read til separator or end of input.
      * @return next integer found
      */
     public static int nextInt() {
@@ -72,6 +72,31 @@ public class Reader {
         } while (!valid);
         
         return i;
+    }
+    /**
+     * Asks for an integer number greater than or equal to min and lower than max til a valid one is given, will read til separator or end of input.
+     * @return next integer found
+     * @see Reader#nextInt()
+     */
+    public static int nextInt(int min, int max) {
+        int i = 0;
+        max--;
+        
+        do {
+            i = nextInt();
+            if (i < min || i > max)
+                System.out.println("Integer out of range given ("+min+" - "+max+"). ");
+        } while (i < min || i > max);
+        
+        return i;
+    }
+    /**
+     * Asks for an integer number greater than or equal to 0 and lower than max til a valid one is given, will read til separator or end of input.
+     * @return next integer found
+     * @see Reader#nextInt(int, int)
+     */
+    public static int nextInt(int max) {
+        return nextInt(0, max);
     }
     
     /**
