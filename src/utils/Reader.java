@@ -12,12 +12,33 @@ import java.io.IOException;
  * @author Denky
  */
 public class Reader {
+
     /**
      * Used to separate the different elements when reading multiple inputs at a time.<br>
-     * e.g: name;surname;age;country
+     * Example: name;surname;age;country
      */
     public static String separator = ";";
     static String buffer = "";  // Stores input for later reading
+
+    /**
+     * Reads whole line of user input.
+     * @return whole line of user input
+     * @throws IOException
+     */
+    public static String nextLine() throws IOException {
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        String string = "";
+
+        // Get user input and make sure it's not blank
+        do {
+            string = br.readLine().trim();
+            if (string.equals("")) {
+                System.out.println("Can't leave blank input");
+            } 
+        } while (string.equals(""));
+
+        return string;
+    }
 
     /**
      * @return everything between separators or the whole line if no separator was found
@@ -47,12 +68,11 @@ public class Reader {
 
         // Remove the ending separator
         string = string.substring(0, string.length() - 1);
-
         return string;
     }
 
     /**
-     * Asks for integer number til a valid one is given, will read til separator or end of input.
+     * Asks for an integer number til a valid one is given, will read til separator or end of input.
      * @return next integer found
      */
     public static int nextInt() {
@@ -73,21 +93,39 @@ public class Reader {
 
         return i;
     }
+    /**
+     * Asks for an integer number greater than or equal to min and lower than max til a valid one is given, will read til separator or end of input.
+     * @return next integer found
+     * @see Reader#nextInt()
+     */
+    public static int nextInt(int min, int max) {
+        int i = 0;
+        max--;
+
+        do {
+            i = nextInt();
+            if (i < min || i > max)
+                System.out.println("Integer out of range given ("+min+" - "+max+"). ");
+        } while (i < min || i > max);
+
+        return i;
+    }
+    /**
+     * Asks for an integer number greater than or equal to 0 and lower than max til a valid one is given, will read til separator or end of input.
+     * @return next integer found
+     * @see Reader#nextInt(int, int)
+     */
+    public static int nextInt(int max) {
+        return nextInt(0, max);
+    }
 
     /**
      * Stores whole line of user input for future reading.
+     * @throws IOException
+     * @see Reader#nextLine()
      */
     static void readLineIntoBuffer() throws IOException {
-        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        String string = "";
-
-        // Get user input and make sure it's not blank
-        do {
-            string = br.readLine().trim();
-            if (string.equals("")) {
-                System.out.println("Can't leave blank input");
-            } 
-        } while (string.equals(""));
+        String string = nextLine();
 
         // Store user input adding a separator at the end to stop the reading
         buffer = string + separator;
