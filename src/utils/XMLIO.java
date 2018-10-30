@@ -24,10 +24,10 @@ import org.xml.sax.SAXException;
 public class XMLIO {
 
     /**
-     * @param filePath path from file we want to get the DOM of
+     * @param file file we want to get the DOM of
      * @return DOM
      */
-    static Document getDOMFromFile(File file) {
+    public static Document getDOMFromFile(File file) {
         Document doc = null;
 
         try {
@@ -50,7 +50,7 @@ public class XMLIO {
      * @return DOM
      * @see XMLIO#getDOMFromFile(java.io.File)
      */
-    static Document getDOMFromFile(String filePath) {
+    public static Document getDOMFromFile(String filePath) {
         return getDOMFromFile(new File(filePath));
     }
 
@@ -59,7 +59,7 @@ public class XMLIO {
      * @param doc DOM
      * @param file XML file
      */
-    static void writeDOMIntoFile(Document doc, File file) {
+    public static void writeDOMIntoFile(Document doc, File file) {
         try {
             // Class to give XML format
             OutputFormat format = new OutputFormat(doc);
@@ -78,7 +78,7 @@ public class XMLIO {
      * @param filePath XML file path
      * @see XMLIO#writeDOMIntoFile(org.w3c.dom.Document, java.io.File)
      */
-    static void writeDOMIntoFile(Document doc, String filePath) {
+    public static void writeDOMIntoFile(Document doc, String filePath) {
         XMLIO.writeDOMIntoFile(doc, new File(filePath));
     }
 
@@ -88,7 +88,7 @@ public class XMLIO {
      * @param query query
      * @return NodeList result object
      */
-    static NodeList select(Document doc, String query) {
+    public static NodeList select(Document doc, String query) {
         NodeList result = null;
 
         try {
