@@ -23,19 +23,19 @@ import org.xml.sax.SAXException;
  */
 public class XMLIO {
 
-    private static File file;
-    
+    private File file;
+
     public XMLIO(File file) {
         this.file = file;
     }
     public XMLIO(String filePath) {
         this(new File(filePath));
     }
-    
+
     /**
      * @return DOM
      */
-    public static Document getDOM() {
+    public Document getDOM() {
         Document doc = null;
 
         try {
@@ -48,7 +48,7 @@ public class XMLIO {
             // Get DOM from file
             doc = builder.parse(file);
         } catch (ParserConfigurationException | SAXException | IOException ex) {
-            System.out.println("There was an error when trying to access the DOM - " + ex.getMessage());
+            System.out.println("There was an error when trying to access the DOM");
         }
 
         return doc;
@@ -58,7 +58,7 @@ public class XMLIO {
      * Write into the XML file from a DOM structure.
      * @param doc DOM
      */
-    public static void writeFromDOM(Document doc) {
+    public void writeFromDOM(Document doc) {
         try {
             // Class to give XML format
             OutputFormat format = new OutputFormat(doc);
@@ -75,11 +75,10 @@ public class XMLIO {
 
     /**
      * Get a NodeList object from a DOM structure by using a <i>query</i>.
-     * @param doc DOM
      * @param query query
      * @return NodeList result object
      */
-    public static NodeList select(String query) {
+    public NodeList select(String query) {
         Document dom = getDOM();
         NodeList result = null;
 
@@ -91,9 +90,11 @@ public class XMLIO {
             // Specifying NODESET as a result allows to cast the otherwise Object into a NodeList
             result = (NodeList) exp.evaluate(dom, XPathConstants.NODESET);
         } catch (XPathExpressionException ex) {
-            System.out.println("There was an error when making the query - " + ex.getMessage());
+            System.out.println("There was an error when making the query");
         }
 
-        return result;
+        if (result != null)
+            return result;
+        else throw new NullPointerException("Select didnt work");
     }
 }
