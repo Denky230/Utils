@@ -23,11 +23,19 @@ import org.xml.sax.SAXException;
  */
 public class XMLIO {
 
+    private static File file;
+    
+    public XMLIO(File file) {
+        this.file = file;
+    }
+    public XMLIO(String filePath) {
+        this(new File(filePath));
+    }
+    
     /**
-     * @param file file we want to get the DOM of
      * @return DOM
      */
-    public static Document getDOMFromFile(File file) {
+    public static Document getDOM() {
         Document doc = null;
 
         try {
@@ -45,21 +53,12 @@ public class XMLIO {
 
         return doc;
     }
-    /**
-     * @param filePath file path
-     * @return DOM
-     * @see XMLIO#getDOMFromFile(java.io.File)
-     */
-    public static Document getDOMFromFile(String filePath) {
-        return getDOMFromFile(new File(filePath));
-    }
 
     /**
-     * Write into an XML file by using a DOM structure.
+     * Write into the XML file from a DOM structure.
      * @param doc DOM
-     * @param file XML file
      */
-    public static void writeDOMIntoFile(Document doc, File file) {
+    public static void writeFromDOM(Document doc) {
         try {
             // Class to give XML format
             OutputFormat format = new OutputFormat(doc);
@@ -73,14 +72,6 @@ public class XMLIO {
             System.out.println("There was an error when trying to access the file");
         }
     }
-    /**
-     * @param doc DOM
-     * @param filePath XML file path
-     * @see XMLIO#writeDOMIntoFile(org.w3c.dom.Document, java.io.File)
-     */
-    public static void writeDOMIntoFile(Document doc, String filePath) {
-        XMLIO.writeDOMIntoFile(doc, new File(filePath));
-    }
 
     /**
      * Get a NodeList object from a DOM structure by using a <i>query</i>.
@@ -88,7 +79,8 @@ public class XMLIO {
      * @param query query
      * @return NodeList result object
      */
-    public static NodeList select(Document doc, String query) {
+    public static NodeList select(String query) {
+        Document dom = getDOM();
         NodeList result = null;
 
         try {
@@ -97,7 +89,7 @@ public class XMLIO {
             // Class to compile query so it can be evaluated
             XPathExpression exp = xpath.compile(query);
             // Specifying NODESET as a result allows to cast the otherwise Object into a NodeList
-            result = (NodeList) exp.evaluate(doc, XPathConstants.NODESET);
+            result = (NodeList) exp.evaluate(dom, XPathConstants.NODESET);
         } catch (XPathExpressionException ex) {
             System.out.println("There was an error when making the query - " + ex.getMessage());
         }
