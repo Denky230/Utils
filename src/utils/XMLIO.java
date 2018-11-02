@@ -35,9 +35,7 @@ public class XMLIO {
     /**
      * @return DOM
      */
-    public Document getDOM() {
-        Document doc = null;
-
+    public Document getDOM() throws IOException {
         try {
             DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
             // Set optional parameters
@@ -46,12 +44,11 @@ public class XMLIO {
 
             DocumentBuilder builder = factory.newDocumentBuilder();
             // Get DOM from file
-            doc = builder.parse(file);
+            Document dom = builder.parse(file);
+            return dom;
         } catch (ParserConfigurationException | SAXException | IOException ex) {
-            System.out.println("There was an error when trying to access the DOM");
+            throw new IOException("There was an error when trying to access the persistence file");
         }
-
-        return doc;
     }
 
     /**
@@ -78,9 +75,8 @@ public class XMLIO {
      * @param query query
      * @return NodeList result object
      */
-    public NodeList select(String query) {
+    public NodeList select(String query) throws IOException {
         Document dom = getDOM();
-        NodeList result = null;
 
         try {
             // Class to make queries
@@ -88,13 +84,12 @@ public class XMLIO {
             // Class to compile query so it can be evaluated
             XPathExpression exp = xpath.compile(query);
             // Specifying NODESET as a result allows to cast the otherwise Object into a NodeList
-            result = (NodeList) exp.evaluate(dom, XPathConstants.NODESET);
-        } catch (XPathExpressionException ex) {
-            System.out.println("There was an error when making the query");
+            NodeList result = (NodeList) exp.evaluate(dom, XPathConstants.NODESET);
+            
+            if (result != null) return result;
+            else throw new NullPointerException();
+        } catch (XPathExpressionException | NullPointerException ex) {
+            throw new NullPointerException("There was an error when making the query - " + ex.getMessage());
         }
-
-        if (result != null)
-            return result;
-        else throw new NullPointerException("Select didnt work");
     }
 }

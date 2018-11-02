@@ -103,7 +103,6 @@ public class Reader {
      */
     public static int nextInt(int min, int max) throws IOException {
         int i = 0;
-        max--;
 
         do {
             i = nextInt();
