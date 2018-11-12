@@ -36,8 +36,6 @@ public class Reader {
                     System.out.println("Can't leave blank input");
                 }
             } while (string.equals(""));
-
-            br.close();
         } catch (IOException e) {
             throw new IOException("There was an error when reading from input - " + e.getMessage());
         }
@@ -64,8 +62,6 @@ public class Reader {
                 c = (char)sr.read();
                 string += c;
             } while (c != separator.charAt(0));
-
-            sr.close();
         } catch (IOException e) {
             throw new IOException("There was an error when reading from input - " + e.getMessage());
         }
