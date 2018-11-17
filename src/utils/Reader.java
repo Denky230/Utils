@@ -26,28 +26,31 @@ public class Reader {
      */
     public static String nextLine() throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        String string = "";
+        String s = "";
 
         try {
             // Get user input and make sure it's not blank
             do {
-                string = br.readLine().trim();
-                if (string.equals("")) {
+                s = br.readLine().trim();
+                if (s.equals("")) {
                     System.out.println("Can't leave blank input");
                 }
-            } while (string.equals(""));
+            } while (s.equals(""));
+
+            br.close();
+            
         } catch (IOException e) {
             throw new IOException("There was an error when reading from input - " + e.getMessage());
         }
 
-        return string;
+        return s;
     }
 
     /**
      * @return everything between separators or the whole line if no separator was found
      */
     public static String nextString() throws IOException {
-        String string = "";
+        String s = "";
 
         if (buffer.equals(""))
             readLineIntoBuffer();
@@ -60,18 +63,21 @@ public class Reader {
             char c;
             do {
                 c = (char)sr.read();
-                string += c;
+                s += c;
             } while (c != separator.charAt(0));
+
+            sr.close();
+            
         } catch (IOException e) {
             throw new IOException("There was an error when reading from input - " + e.getMessage());
         }
 
         // Store rest of user input back to buffer for future reading
-        buffer = buffer.substring(string.length());
+        buffer = buffer.substring(s.length());
 
-        // Remove the ending separator
-        string = string.substring(0, string.length() - 1);
-        return string;
+        // Remove ending separator
+        s = s.substring(0, s.length() - 1);
+        return s;
     }
 
     /**
@@ -88,6 +94,7 @@ public class Reader {
                 s = nextString();
                 i = Integer.parseInt(s);
                 valid = true;
+
             } catch (NumberFormatException e) {
                 System.out.println("Invalid input given: " + s + ". Integer number expected");
                 buffer = "";    // Empty buffer so nextString() reads user input again
@@ -126,9 +133,9 @@ public class Reader {
      * @see Reader#nextLine()
      */
     static void readLineIntoBuffer() throws IOException {
-        String string = nextLine();
+        String s = nextLine();
 
         // Store user input adding a separator at the end to stop the reading
-        buffer = string + separator;
+        buffer = s + separator;
     }
 }
