@@ -27,7 +27,7 @@ public class Reader {
     public static String nextLine() throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         String s = "";
-
+        
         try {
             // Get user input and make sure it's not blank
             do {
@@ -37,7 +37,7 @@ public class Reader {
                 }
             } while (s.equals(""));
 
-            br.close();
+//            br.close();
             
         } catch (IOException e) {
             throw new IOException("There was an error when reading from input - " + e.getMessage());
