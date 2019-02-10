@@ -36,7 +36,9 @@ public class Reader {
     public String nextLine() throws IOException {
         String s = "";
         
-        try ( BufferedReader br = new BufferedReader(new InputStreamReader(System.in)); ) {
+        try {
+            BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+
             // Get user input and make sure it's not blank
             do {
                 s = br.readLine().trim();
@@ -73,7 +75,7 @@ public class Reader {
             } while (c != separator.charAt(0));
             
         } catch (IOException e) {
-            throw new IOException("There was an error when reading from input - " + e.getMessage());
+            throw new IOException("There was an error when reading from inputeee - " + e.getMessage());
         }
 
         // Store rest of user input back to buffer for future reading
@@ -120,7 +122,7 @@ public class Reader {
         do {
             i = nextInt();
             if (i < min || i > max)
-                System.out.println("Integer out of range given ("+min+" - "+max+"). ");
+                System.out.println("Integer out of range given ("+min+" - "+max+")");
         } while (i < min || i > max);
 
         return i;
