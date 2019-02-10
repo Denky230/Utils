@@ -17,8 +17,8 @@ public class Reader {
      * Used to separate the different elements when reading multiple inputs at a time.<br>
      * Example: name;surname;age;country
      */
-    public static String separator = ";";
-    static String buffer = "";  // Stores input for later reading
+    public String separator = ";";
+    private String buffer = "";  // Stores input for later reading
 
     private Reader() {}
     private static Reader instance;
@@ -34,26 +34,19 @@ public class Reader {
      * @throws java.io.IOException
      */
     public String nextLine() throws IOException {
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+
+        // Get user input and make sure it's not blank
         String s = "";
-        
-        try {
-            BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-
-            // Get user input and make sure it's not blank
-            do {
-                s = br.readLine().trim();
-                if (s.equals("")) {
-                    System.out.println("Can't leave blank input");
-                }
-            } while (s.equals(""));
-
-        } catch (IOException e) {
-            throw new IOException("There was an error when reading from input - " + e.getMessage());
-        }
+        do {
+            s = br.readLine().trim();
+            if (s.equals("")) {
+                System.out.println("Can't leave blank input");
+            }
+        } while (s.equals(""));
 
         return s;
     }
-
     /**
      * @return everything between separators or the whole line if no separator was found
      * @throws java.io.IOException
@@ -64,14 +57,14 @@ public class Reader {
             readLineIntoBuffer();
         }
 
-        String string = "";
         // Read from buffer instead of directly from user input
+        String s = "";
         try ( StringReader sr = new StringReader(buffer); ) {
             // Read til a separator is found
             char c;
             do {
                 c = (char)sr.read();
-                string += c;
+                s += c;
             } while (c != separator.charAt(0));
             
         } catch (IOException e) {
@@ -79,11 +72,11 @@ public class Reader {
         }
 
         // Store rest of user input back to buffer for future reading
-        buffer = buffer.substring(string.length());
+        buffer = buffer.substring(s.length());
 
         // Remove ending separator
-        string = string.substring(0, string.length() - 1);
-        return string;
+        s = s.substring(0, s.length() - 1);
+        return s;
     }
 
     /**
@@ -142,9 +135,7 @@ public class Reader {
      * @see Reader#nextLine()
      */
     private void readLineIntoBuffer() throws IOException {
-        String s = nextLine();
-
         // Store user input adding a separator at the end to stop the reading
-        buffer = s + separator;
+        buffer = nextLine() + separator;
     }
 }
